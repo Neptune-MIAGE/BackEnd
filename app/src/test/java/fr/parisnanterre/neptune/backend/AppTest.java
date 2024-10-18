@@ -3,13 +3,17 @@
  */
 package fr.parisnanterre.neptune.backend;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.Assert.*;
-
+@SpringBootTest
 public class AppTest {
-    @Test public void appHasAGreeting() {
-        App classUnderTest = new App();
-        // assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+
+    @Test
+    public void testMain() {
+        // Checks that the main method doesn't throw an exception
+        assertDoesNotThrow(() -> App.main(new String[] {}));
     }
 }

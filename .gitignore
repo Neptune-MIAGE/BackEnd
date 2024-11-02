@@ -1,12 +1,15 @@
+# macOS
 .DS_Store
-.vscode
-.idea
+
+# IDE configurations
+.vscode/
+.idea/
 
 # Ignore Gradle project-specific cache directory
-.gradle
+.gradle/
 
 # Ignore Gradle build output directory
-build
+build/
 
-
-application.yml
+# Ignore application configuration
+src/main/resources/application.yml

@@ -27,6 +27,18 @@ test {
     finalizedBy jacocoTestReport // Generates JaCoCo report after testing
 }
 
+plugins {
+  id "org.sonarqube" version "5.1.0.4882"
+}
+
+sonar {
+  properties {
+    property "sonar.projectKey", "Neptune-MIAGE_BackEnd"
+    property "sonar.organization", "neptune-miage"
+    property "sonar.host.url", "https://sonarcloud.io"
+  }
+}
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()

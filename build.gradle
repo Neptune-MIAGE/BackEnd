@@ -18,6 +18,7 @@ jacocoTestReport {
     }
 }
 
+
 test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport // Generates JaCoCo report after testing

@@ -1,0 +1,38 @@
+name: Java CI Gradle build and test  # nom de l'action qui sera affiché sur github
+
+on:               # mot clé pour quand l'action sera déclenchée
+  push:           # déclenché quand on push
+    branches:     # uniquement les push de main et develop
+      - main
+      - develop
+  pull_request:   # déclenché quand on pull-request
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest  # tourne sur derni!re versions de ubuntu
+    permissions:
+      contents: read        # lire le contenu (code)
+
+
+    # Get source code and config java
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0  | setup propre aux GitHub Actions pour opti le temps
+
+    # Build project
+    - name: Build with Gradle Wrapper
+      run: ./gradlew build                # gradleW permet compatibilité si version differente de gradle entre projet et machine exécutant
+
+    # Test project
+    - name: Run tests
+      run: ./gradlew test

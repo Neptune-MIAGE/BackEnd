@@ -4,7 +4,16 @@ plugins {
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id 'jacoco' // For test coverage
+	id "org.sonarqube" version "5.1.0.4882"
 
+}
+
+sonar {
+  properties {
+    property "sonar.projectKey", "Neptune-MIAGE_BackEnd"
+    property "sonar.organization", "neptune-miage"
+    property "sonar.host.url", "https://sonarcloud.io"
+  }
 }
 
 jacoco {

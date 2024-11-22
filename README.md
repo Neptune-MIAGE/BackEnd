@@ -1,4 +1,4 @@
-# BackEnd projet DevOps Neptune MIAGE
+# BackEnd MoodMap
 
 [![Java CI Gradle build and test](https://github.com/Neptune-MIAGE/BackEnd/actions/workflows/gradle_build.yml/badge.svg?branch=main)](https://github.com/Neptune-MIAGE/BackEnd/actions/workflows/gradle_build.yml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Neptune-MIAGE_BackEnd&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Neptune-MIAGE_BackEnd)
 

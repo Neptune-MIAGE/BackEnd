@@ -1,1 +1,2 @@
 rootProject.name = 'Neptune'
+include('app')

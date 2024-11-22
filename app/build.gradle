@@ -9,6 +9,9 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'jacoco'
+    id "org.sonarqube" version "5.1.0.4882"
+    id 'org.asciidoctor.jvm.convert' version '4.0.2'    // base de AsciiDoc
+    id 'org.asciidoctor.jvm.pdf' version '4.0.2'        // puglin supplémentaire
 }
 
 jacoco {
@@ -22,21 +25,41 @@ jacocoTestReport {
     }
 }
 
-test {
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport // Generates JaCoCo report after testing
-}
-
-plugins {
-  id "org.sonarqube" version "5.1.0.4882"
-}
-
 sonar {
   properties {
     property "sonar.projectKey", "Neptune-MIAGE_BackEnd"
     property "sonar.organization", "neptune-miage"
     property "sonar.host.url", "https://sonarcloud.io"
   }
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // Generates JaCoCo report after testing
+}
+
+asciidoctor {
+    sourceDir = file('src/docs/asciidoc')
+    outputDir = file("${buildDir}/docs/asciidoc")
+}
+
+asciidoctorPdf {
+    sourceDir = file('src/docs/asciidoc')
+    outputDir = file("${buildDir}/docs/asciidoc")
+}
+
+asciidoctorj {
+    requires 'rouge'
+    modules {
+        diagram.use()
+        diagram.version '1.5.16'
+    }
+    attributes 'build-gradle': file('build.gradle'),
+        'sourcedir': project.sourceSets.main.java.srcDirs[0],
+        'source-highlighter': 'rouge',
+        'rouge-style': 'github',
+        'rouge-theme': 'github'
+        
 }
 
 repositories {

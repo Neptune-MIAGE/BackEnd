@@ -62,6 +62,14 @@ asciidoctorj {
         
 }
 
+tasks.named('asciidoctor').configure {
+    dependsOn tasks.named('asciidoctorPdf')
+}
+
+tasks.named('build').configure {
+    dependsOn tasks.named('asciidoctor')
+}
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()

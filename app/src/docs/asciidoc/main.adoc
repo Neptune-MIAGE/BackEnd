@@ -37,3 +37,12 @@ Simply run:
 
 == Here is the class diagram
 plantuml::src/docs/asciidoc/models/diagram.puml[svg]
+
+== Here is the source code of the main class:
+
+[source,java]
+.App source code
+----
+include::../../main/java/fr/parisnanterre/neptune/backend/App.java[indent=0]
+----
+

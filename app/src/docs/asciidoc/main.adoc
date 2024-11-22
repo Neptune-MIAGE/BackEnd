@@ -43,6 +43,6 @@ plantuml::src/docs/asciidoc/models/diagram.puml[svg]
 [source,java]
 .App source code
 ----
-include::../../main/java/fr/parisnanterre/neptune/backend/App.java[indent=0]
+include::src/main/java/fr/parisnanterre/neptune/backend/App.java[indent=0]
 ----
 

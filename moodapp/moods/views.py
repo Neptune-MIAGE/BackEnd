@@ -1,11 +1,14 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render
-from .models import Mood, UserMood
+from .models import CustomUser, Mood, UserMood, MoodGroup, GroupMembership
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone  # Utilisez timezone pour garantir la bonne heure
 from django.http import JsonResponse
 from .models import UserMood
+from django.db.models import Avg
+from statistics import median
 
 
 # Vue pour afficher la liste des humeurs disponibles
@@ -58,3 +61,152 @@ def user_moods_page(request):
 def user_moods_json(request):
     user_moods = UserMood.objects.filter(user=request.user).values('date', 'mood__name', 'note')
     return JsonResponse(list(user_moods), safe=False)
+
+
+# Vue pour créer un groupe d'humeurs
+@login_required
+def create_group(request):
+    if request.method == 'POST':
+        group_name = request.POST.get('group_name')
+        description = request.POST.get('description')
+        
+        # Vérifier si le groupe existe déjà
+        if MoodGroup.objects.filter(name=group_name).exists():
+            # Ajouter un message d'erreur si le nom existe déjà
+            messages.error(request, "Un groupe avec ce nom existe déjà.")
+            return redirect('create_group')  # Redirige vers la page de création du groupe
+        
+        # Si pas d'erreur, créer le groupe
+        new_group = MoodGroup.objects.create(name=group_name, description=description, leader=request.user)
+        GroupMembership.objects.create(user=request.user, group=new_group)
+        messages.success(request, "Groupe créé avec succès !")
+        return redirect('group_stats', group_id=new_group.id)  # Rediriger vers la page du groupe
+
+    return render(request, 'moods/create_group.html')  # Pour les requêtes GET
+
+# Vue pour supprimer un groupe
+@login_required
+def delete_group(request, group_id):
+    group = get_object_or_404(MoodGroup, id=group_id)
+    
+    # Vérifier si l'utilisateur est le chef du groupe
+    if group.leader != request.user:
+        return JsonResponse({"error": "Vous devez être le chef du groupe pour le supprimer."}, status=403)
+    
+    # Supprimer le groupe
+    group.delete()
+    messages.success(request, "Vous avez supprimé le groupe avec succès.")
+    return redirect('manage_groups')
+
+
+# Vue pour rejoindre un groupe
+@login_required
+def join_group(request, group_id):
+    group = get_object_or_404(MoodGroup, id=group_id)
+    if not GroupMembership.objects.filter(user=request.user, group=group).exists():
+        GroupMembership.objects.create(user=request.user, group=group)
+    return redirect('manage_groups')
+
+# Vue pour quitter un groupe
+@login_required
+def leave_group(request, group_id):
+    group = get_object_or_404(MoodGroup, id=group_id)
+
+    # Vérification si l'utilisateur est le leader
+    if group.leader == request.user:
+        messages.error(request, "Impossible de quitter le groupe en tant que leader. Transférez le rôle ou supprimez le groupe.")
+        return redirect('group_stats', group_id=group.id)
+
+    membership = GroupMembership.objects.filter(user=request.user, group=group).first()
+
+    if membership:
+        membership.delete()
+
+    messages.success(request, "Vous avez quitté le groupe avec succès.")
+    return redirect('manage_groups')
+
+
+# Vue pour supprimer un utilisateur d'un groupe
+@login_required
+def remove_user_from_group(request, group_id, member_id):
+    group = get_object_or_404(MoodGroup, id=group_id)
+    
+    # Vérifier si l'utilisateur est le chef du groupe
+    if group.leader != request.user:
+        return JsonResponse({"error": "Vous devez être le chef du groupe pour retirer un membre."}, status=403)
+
+    # Vérifier si l'utilisateur est dans le groupe
+    member = get_object_or_404(CustomUser, id=member_id)
+    if member not in group.users.all():
+        return JsonResponse({"error": "L'utilisateur n'est pas membre du groupe."}, status=400)
+
+    # Retirer le membre du groupe
+    group.users.remove(member)
+    messages.success(request, "Membre supprimé avec succès.")
+    return redirect('group_stats', group_id=group.id)
+
+
+# Vue pour afficher les statistiques d'un groupe
+@login_required
+def group_stats(request, group_id):
+    group = get_object_or_404(MoodGroup, id=group_id)
+    user_moods = UserMood.objects.filter(user__in=group.users.all())
+    
+    # Récupérer les membres du groupe
+    group_members = group.users.all()
+    
+    # Vérifie si l'utilisateur est membre du groupe
+    is_member = GroupMembership.objects.filter(user=request.user, group=group).exists()
+
+    
+    if user_moods.exists():
+        average_mood = user_moods.aggregate(Avg("mood__id"))["mood__id__avg"]
+        median_mood = median([mood.mood.id for mood in user_moods])
+    else:
+        average_mood = None
+        median_mood = None
+    
+    context = {
+        "group": group,
+        "average_mood": average_mood,
+        "median_mood": median_mood,
+        "group_members": group_members,
+        "is_member": is_member,
+    }
+    return render(request, "moods/group_stats.html", context)
+
+# Vue pour transferer la gestion du groupe
+@login_required
+def transfer_leadership(request, group_id, member_id):
+    group = get_object_or_404(MoodGroup, id=group_id)
+    
+    # Vérifier si l'utilisateur est le chef du groupe
+    if group.leader != request.user:
+        return JsonResponse({"error": "Vous devez être le chef du groupe pour transférer le rôle."}, status=403)
+
+    # Vérifier si le membre est dans le groupe
+    new_leader = get_object_or_404(CustomUser, id=member_id)
+    if new_leader not in group.users.all():
+        return JsonResponse({"error": "Le nouveau chef doit être membre du groupe."}, status=400)
+
+    # Passer le flambeau
+    group.leader = new_leader
+    group.save()
+    messages.success(request, "Flambeau transféré avec succès.")
+    return redirect('group_stats', group_id=group.id)
+
+# Vue pour gérer les groupes de l'utilisateur
+@login_required
+def manage_groups(request):
+    user_groups = MoodGroup.objects.filter(users=request.user)  # Récupère les groupes de l'utilisateur
+    all_groups = MoodGroup.objects.all()  # Récupère tous les groupes
+    context = {
+        'user_groups': user_groups,
+        'all_groups': all_groups,
+    }
+
+    # Pour chaque groupe, vérifier si l'utilisateur en fait partie
+    for group in all_groups:
+        group.is_member = GroupMembership.objects.filter(user=request.user, group=group).exists()
+
+    return render(request, 'moods/manage_groups.html', context)

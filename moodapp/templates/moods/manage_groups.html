@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">Mes Groupes d'Humeurs</h1>
+
+    <!-- Card for User Groups -->
+    <div class="card shadow mb-4">
+        <div class="card-header text-white" style="background-color: #A3C4BC;">
+            <h3 class="card-title text-center">Liste de Vos Groupes</h3>
+        </div>
+
+        <div class="card-body">
+            {% if user_groups %}
+            <ul class="list-group">
+                {% for group in user_groups %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ group.name }}</span>
+                    <div class="ml-auto">
+                        <a href="{% url 'group_stats' group.id %}" class="btn btn-primary btn-sm">Voir les Statistiques</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-center">Vous n'appartenez à aucun groupe pour le moment.</p>
+            {% endif %}
+            <div class="mt-4 text-center">
+                <a href="{% url 'create_group' %}" class="btn btn-success">Créer un Nouveau Groupe</a>
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div class="alert alert-success" style="margin-top: 10px;">
+                            {{ message }}
+                        </div>
+                    {% elif message.tags == 'error' %}
+                        <div class="alert alert-danger" style="margin-top: 10px;">
+                            {{ message }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info" style="margin-top: 10px;">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        
+        </div>
+    </div>
+
+    <!-- Card for All Groups -->
+    <div class="card shadow mt-4">
+        <div class="card-header text-white" style="background-color: #C3E5AE;">
+            <h3 class="card-title text-center">Tous les Groupes</h3>
+        </div>
+        <div class="card-body">
+            {% if all_groups %}
+            <ul class="list-group">
+                {% for group in all_groups %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ group.name }}</span>
+                    <div class="ml-auto">
+                        {% if group.is_member == False %}
+                        <a href="{% url 'join_group' group.id %}" class="btn btn-success btn-sm ml-2">Rejoindre</a>
+                        {% endif %}
+                        <a href="{% url 'group_stats' group.id %}" class="btn btn-primary btn-sm">Voir les
+                            Statistiques</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-center">Aucun groupe disponible pour le moment.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

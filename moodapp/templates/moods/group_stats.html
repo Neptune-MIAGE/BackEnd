@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">{{ group.name }}</h1>
+
+    <!-- Card for Group Description, only shown if description exists -->
+    {% if group.description %}
+    <div class="card shadow mb-4">
+        <div class="card-header text-white" style="background-color: #A3C4BC;">
+            <h3 class="card-title text-center">Description du Groupe</h3>
+        </div>
+        <div class="card-body">
+            <p>{{ group.description }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Card for Group Statistics -->
+    <div class="card shadow mb-4">
+        <div class="card-header text-white" style="background-color: #eee382;">
+            <h3 class="card-title text-center">Statistiques du Groupe</h3>
+        </div>
+        <div class="card-body text-center">
+            <p><strong>Moyenne d'Humeur :</strong> {{ average_mood|default:"Non calculée" }}</p>
+            <p><strong>Médiane d'Humeur :</strong> {{ median_mood|default:"Non calculée" }}</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success" style="margin-top: 10px;">
+                        {{ message }}
+                    </div>
+                {% elif message.tags == 'error' %}
+                    <div class="alert alert-danger" style="margin-top: 10px;">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info" style="margin-top: 10px;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Card for Group Members -->
+    <div class="card shadow mb-4">
+        <div class="card-header text-white" style="background-color: #A3C4BC;">
+            <h3 class="card-title text-center">Membres du Groupe : {{ group_members.count }}</h3>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for member in group_members %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ member.username }}
+                            {% if member == group.leader %}
+                                <img src="{% static 'images/crown.png' %}" alt="Chef" style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">
+                            {% endif %}
+                        </span>
+
+                        <!-- Actions: Only show for the group leader -->
+                        {% if group.leader == user and member != group.leader %}
+                            <div>
+                                <!-- Form for transferring leadership -->
+                                <form method="post" action="{% url 'transfer_leadership' group.id member.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-info btn-sm">Passer le Flambeau</button>
+                                </form>
+
+                                <!-- Form for removing a member -->
+                                <form method="post" action="{% url 'remove_user_from_group' group.id member.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Retirer</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">Aucun membre pour ce groupe.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <!-- Form for deleting the group -->
+        {% if group.leader == user %}
+        <form method="post" action="{% url 'delete_group' group.id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Supprimer le Groupe</button>
+        </form>
+        {% endif %}
+        <!-- Form for quitting the group (visible to all members) -->
+        {% if is_member %}
+            <form method="post" action="{% url 'leave_group' group.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Quitter le Groupe</button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'join_group' group.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-sm">Rejoindre le Groupe</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="text-center mt-4">
+        <!-- Return to groups button -->
+        <a href="{% url 'manage_groups' %}" class="btn btn-secondary">Retour aux Groupes</a>
+    </div>
+    
+</div>
+
+
+{% endblock %}

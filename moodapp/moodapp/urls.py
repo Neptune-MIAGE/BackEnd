@@ -25,4 +25,5 @@ urlpatterns = [
     
     # Gestion des utilisateurs : login, logout
     path('accounts/', include('accounts.urls')),  # Inclure les URLs de l'application accounts
+    
 ]

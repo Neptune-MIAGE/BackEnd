@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render
-from .models import CustomUser, Mood, UserMood, MoodGroup, GroupMembership
+from .models import CustomUser, Mood, UserMood, MoodGroup, GroupMembership, MoodRanking
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone  # Utilisez timezone pour garantir la bonne heure
 from django.http import JsonResponse
@@ -215,5 +215,5 @@ def manage_groups(request):
 #vues liées au ranking
 @login_required
 def user_list(request):
-    users = User.objects.all()  # Récupère tous les utilisateurs
-    return render(request, 'user_list.html', {'users': users})
+    users = MoodRanking.objects.all() # Récupère tous les utilisateurs
+    return render(request, 'moods/rankings.html', {'users': users})

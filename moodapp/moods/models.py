@@ -82,7 +82,6 @@ class MoodRanking(models.Model):
         verbose_name = "Mood Ranking"
         verbose_name_plural = "Mood Rankings"
 
-    @staticmethod
     def rank_users():
         """
         Classe les utilisateurs par leur moyenne de mood.
@@ -91,7 +90,6 @@ class MoodRanking(models.Model):
         users_with_avg = CustomUser.objects.annotate(avg_mood=Avg("user_moods__note")).order_by("-avg_mood")
         return [(user, user.avg_mood or 0) for user in users_with_avg]
 
-    @staticmethod
     def rank_groups():
         """
         Classe les groupes par leur moyenne de mood.
@@ -100,7 +98,6 @@ class MoodRanking(models.Model):
         groups_with_avg = MoodGroup.objects.annotate(avg_mood=Avg("users__user_moods__note")).order_by("-avg_mood")
         return [(group, group.avg_mood or 0) for group in groups_with_avg]
 
-    @staticmethod
     def update_rankings():
         """
         Méthode pour mettre à jour et afficher les classements des utilisateurs et des groupes.

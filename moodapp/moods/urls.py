@@ -18,7 +18,7 @@ urlpatterns = [
     path('groups/stats/<int:group_id>/', views.group_stats, name='group_stats'),
 
     #routes liées au ranking
-    path('rankings/', views.user_list, name='user_list'),
+    path('rankings/', views.user_list, name='rankings'),
 
 
 ]

@@ -215,5 +215,5 @@ def manage_groups(request):
 #vues liées au ranking
 @login_required
 def user_list(request):
-    users = MoodRanking.objects.all() # Récupère tous les utilisateurs
-    return render(request, 'moods/rankings.html', {'users': users})
+    groups_ranks = MoodRanking.rank_groups # Récupère tous les utilisateurs
+    return render(request, 'moods/rankings.html', {'group_ranks': groups_ranks})

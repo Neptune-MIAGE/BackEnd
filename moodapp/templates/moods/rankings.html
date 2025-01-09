@@ -2,30 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="container py-5">
-    <h1 class="text-center mb-4">Classements des Utilisateurs et Groupes</h1>
-
-    <!-- Classement des Utilisateurs -->
-    <div class="card shadow mb-4">
-        <div class="card-header text-white" style="background-color: #A3C4BC;">
-            <h3 class="card-title text-center">Classement des Utilisateurs</h3>
-        </div>
-        <div class="card-body">
-            {% if user_ranks %}
-                <ol>
-                    {% for rank, (user, avg_mood) in user_ranks %}
-                        <li class="d-flex justify-content-between">
-                            <span>{{ rank }}. {{ user.username }} - Moyenne : {{ avg_mood|floatformat:2 }}</span>
-                            {% if rank == 1 %}
-                                <img src="{% static 'images/crown.png' %}" alt="Leader" style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ol>
-            {% else %}
-                <p>Aucun utilisateur trouvé.</p>
-            {% endif %}
-        </div>
-    </div>
+    <h1 class="text-center mb-4">Classements des Groupes</h1>
 
     <!-- Classement des Groupes -->
     <div class="card shadow mb-4">
@@ -35,14 +12,15 @@
         <div class="card-body">
             {% if group_ranks %}
                 <ol>
-                    {% for rank, (group, avg_mood) in group_ranks %}
-                        <li class="d-flex justify-content-between">
-                            <span>{{ rank }}. {{ group.name }} - Moyenne : {{ avg_mood|floatformat:2 }}</span>
-                            {% if rank == 1 %}
-                                <img src="{% static 'images/crown.png' %}" alt="Leader" style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">
-                            {% endif %}
-                        </li>
-                    {% endfor %}
+                    {% for rank, group_and_avg_mood in group_ranks %}
+    <li class="d-flex justify-content-between">
+        <span>{{ rank }}. {{ group_and_avg_mood.0.name }} - Moyenne : {{ group_and_avg_mood.1|floatformat:2 }}</span>
+        {% if rank == 1 %}
+            <img src="{% static 'images/crown.png' %}" alt="Leader" style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">
+        {% endif %}
+    </li>
+{% endfor %}
+
                 </ol>
             {% else %}
                 <p>Aucun groupe trouvé.</p>

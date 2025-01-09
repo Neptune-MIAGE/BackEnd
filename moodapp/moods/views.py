@@ -105,7 +105,7 @@ def join_group(request, group_id):
     group = get_object_or_404(MoodGroup, id=group_id)
     if not GroupMembership.objects.filter(user=request.user, group=group).exists():
         GroupMembership.objects.create(user=request.user, group=group)
-    return redirect('manage_groups')
+    return redirect('group_stats', group_id=group_id)
 
 # Vue pour quitter un groupe
 @login_required

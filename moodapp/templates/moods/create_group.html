@@ -2,25 +2,25 @@
 {% load static %}
 {% block content %}
 <div class="container py-5">
-    <h1 class="text-center mb-4">Créer un Groupe d'Humeurs</h1>
+    <h1 class="text-center mb-4">Créer un groupe</h1>
 
     <!-- Card for Create Group Form -->
     <div class="card shadow">
         <div class="card-header text-white" style="background-color: #A3C4BC;">
-            <h3 class="card-title text-center">Formulaire de Création</h3>
+            <h3 class="card-title text-center">Formulaire de création</h3>
         </div>
         <div class="card-body">
             <form method="POST">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="group_name" class="form-label">Nom du Groupe</label>
+                    <label for="group_name" class="form-label">Nom du groupe</label>
                     <input type="text" id="group_name" name="group_name" class="form-control" placeholder="Entrez le nom du groupe" required>
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <textarea id="description" name="description" class="form-control" rows="4" placeholder="Décrivez votre groupe"></textarea>
                 </div>
-                <button type="submit" class="btn btn-success w-100">Créer le Groupe</button>
+                <button type="submit" class="btn btn-success w-100">Créer le groupe</button>
             </form>
             {% if messages %}
                 {% for message in messages %}

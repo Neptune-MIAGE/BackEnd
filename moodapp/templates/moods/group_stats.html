@@ -8,7 +8,7 @@
     {% if group.description %}
     <div class="card shadow mb-4">
         <div class="card-header text-white" style="background-color: #A3C4BC;">
-            <h3 class="card-title text-center">Description du Groupe</h3>
+            <h3 class="card-title text-center">Description</h3>
         </div>
         <div class="card-body">
             <p>{{ group.description }}</p>
@@ -17,9 +17,10 @@
     {% endif %}
 
     <!-- Card for Group Statistics -->
+    {% if is_member %}
     <div class="card shadow mb-4">
         <div class="card-header text-white" style="background-color: #eee382;">
-            <h3 class="card-title text-center">Statistiques du Groupe</h3>
+            <h3 class="card-title text-center">Statistiques</h3>
         </div>
         <div class="card-body text-center">
             <p><strong>Moyenne d'Humeur :</strong> {{ average_mood|default:"Non calculée" }}</p>
@@ -44,11 +45,12 @@
             {% endfor %}
         {% endif %}
     </div>
+    {% endif %}
 
     <!-- Card for Group Members -->
     <div class="card shadow mb-4">
         <div class="card-header text-white" style="background-color: #A3C4BC;">
-            <h3 class="card-title text-center">Membres du Groupe : {{ group_members.count }}</h3>
+            <h3 class="card-title text-center">Membres : {{ group_members.count }}</h3>
         </div>
         <div class="card-body">
             <ul class="list-group">
@@ -90,26 +92,26 @@
         {% if group.leader == user %}
         <form method="post" action="{% url 'delete_group' group.id %}" style="display: inline;">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm">Supprimer le Groupe</button>
+            <button type="submit" class="btn btn-danger btn-sm">Supprimer le groupe</button>
         </form>
         {% endif %}
         <!-- Form for quitting the group (visible to all members) -->
         {% if is_member %}
             <form method="post" action="{% url 'leave_group' group.id %}" style="display: inline;">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-sm">Quitter le Groupe</button>
+                <button type="submit" class="btn btn-danger btn-sm">Quitter le groupe</button>
             </form>
         {% else %}
             <form method="post" action="{% url 'join_group' group.id %}" style="display: inline;">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-success btn-sm">Rejoindre le Groupe</button>
+                <button type="submit" class="btn btn-success btn-sm">Rejoindre le groupe</button>
             </form>
         {% endif %}
     </div>
 
     <div class="text-center mt-4">
         <!-- Return to groups button -->
-        <a href="{% url 'manage_groups' %}" class="btn btn-secondary">Retour aux Groupes</a>
+        <a href="{% url 'manage_groups' %}" class="btn btn-secondary">Retour aux groupes</a>
     </div>
     
 </div>

@@ -210,3 +210,10 @@ def manage_groups(request):
         group.is_member = GroupMembership.objects.filter(user=request.user, group=group).exists()
 
     return render(request, 'moods/manage_groups.html', context)
+
+
+#vues liées au ranking
+@login_required
+def user_list(request):
+    users = User.objects.all()  # Récupère tous les utilisateurs
+    return render(request, 'user_list.html', {'users': users})

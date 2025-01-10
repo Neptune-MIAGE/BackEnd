@@ -12,6 +12,14 @@ class CustomUser(AbstractUser):
     
     def __str__(self):
         return self.username
+    
+    def average_mood(user):
+        """
+        Calcule le mood moyen d'un utilisateur.
+        """
+        return UserMood.objects.filter(user=user).aggregate(Avg("mood__id"))["mood__id__avg"]
+
+    
 
 # Modèle Mood
 class Mood(models.Model):
@@ -32,6 +40,8 @@ class UserMood(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.mood.name} on {self.date}"
+    
+    
 
 # Modèle MoodGroup : les groupes créés
 class MoodGroup(models.Model):
@@ -82,13 +92,15 @@ class MoodRanking(models.Model):
         verbose_name = "Mood Ranking"
         verbose_name_plural = "Mood Rankings"
 
+   
+
     def rank_users():
         """
         Classe les utilisateurs par leur moyenne de mood.
         Retourne une liste triée de tuples : (utilisateur, moyenne).
         """
         users_with_avg = CustomUser.objects.annotate(avg_mood=Avg("user_moods__note")).order_by("-avg_mood")
-        return [(user, user.avg_mood or 0) for user in users_with_avg]
+        return [(user, user.average_mood or 0) for user in users_with_avg]
 
     def rank_groups():
         """
@@ -96,19 +108,6 @@ class MoodRanking(models.Model):
         Retourne une liste triée de tuples : (groupe, moyenne).
         """
         groups_with_avg = MoodGroup.objects.annotate(avg_mood=Avg("users__user_moods__note")).order_by("-avg_mood")
-        return [(group, group.avg_mood or 0) for group in groups_with_avg]
+        return [(group, group.average_mood or 0) for group in groups_with_avg]
 
-    def update_rankings():
-        """
-        Méthode pour mettre à jour et afficher les classements des utilisateurs et des groupes.
-        """
-        user_ranks = MoodRanking.rank_users()
-        group_ranks = MoodRanking.rank_groups()
-
-        print("Classement des utilisateurs :")
-        for rank, (user, avg_mood) in enumerate(user_ranks, start=1):
-            print(f"{rank}. {user.username}: {avg_mood:.2f}")
-
-        print("\nClassement des groupes :")
-        for rank, (group, avg_mood) in enumerate(group_ranks, start=1):
-            print(f"{rank}. {group.name}: {avg_mood:.2f}")
+    

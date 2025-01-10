@@ -214,6 +214,12 @@ def manage_groups(request):
 
 #vues liées au ranking
 @login_required
-def user_list(request):
-    groups_ranks = MoodRanking.rank_groups # Récupère tous les utilisateurs
-    return render(request, 'moods/rankings.html', {'group_ranks': groups_ranks})
+def rankings_list(request):
+    user_ranks = MoodRanking.rank_users #recupere tous les users
+    groups_ranks = MoodRanking.rank_groups # Récupère tous les groupes
+    context = {
+        'user_ranks':user_ranks,
+        'group_ranks': groups_ranks
+    }
+    return render(request, 'moods/rankings.html', context )
+

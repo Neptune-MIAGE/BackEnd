@@ -217,9 +217,34 @@ def manage_groups(request):
 def rankings_list(request):
     user_ranks = MoodRanking.rank_users #recupere tous les users
     groups_ranks = MoodRanking.rank_groups # Récupère tous les groupes
+    best_user = MoodRanking.get_best_user()
+    best_group = MoodRanking.get_best_group()
+
     context = {
-        'user_ranks':user_ranks,
-        'group_ranks': groups_ranks
+        'user_ranks': user_ranks,
+        'group_ranks': groups_ranks,
+        'best_user': best_user,
+        'best_group': best_group,
     }
     return render(request, 'moods/rankings.html', context )
 
+@login_required
+def rankings_users(request):
+    user_ranks = MoodRanking.rank_users #recupere tous les users
+    best_user = MoodRanking.get_best_user()
+    context = {
+        'user_ranks': user_ranks,
+        'best_user': best_user,
+    }
+    return render(request, 'moods/rankings_users.html', context )
+
+@login_required
+def rankings_groups(request):
+    groups_ranks = MoodRanking.rank_groups # Récupère tous les groupes
+    best_group = MoodRanking.get_best_group()
+
+    context = {
+        'group_ranks': groups_ranks,
+        'best_group': best_group,
+    }
+    return render(request, 'moods/rankings_groups.html', context )

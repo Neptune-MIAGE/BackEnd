@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="container py-5">
-    <h1 class="text-center mb-4">Classements des Groupes</h1>
+    <h1 class="text-center mb-4">Classements globaux</h1>
 
     <!-- Classement des Groupes -->
     <div class="card shadow mb-4">
@@ -11,48 +11,57 @@
         </div>
         <div class="card-body">
             {% if group_ranks %}
-                <ol>
-                    {% for group_and_avg_mood in group_ranks %}
-    <li class="d-flex justify-content-between">
-        <span>{{ group_and_avg_mood.0.name }} - Moyenne : {{ group_and_avg_mood.1|floatformat:2 }}</span>
-        {% if rank == 1 %}
-            <img src="{% static 'images/crown.png' %}" alt="Leader" style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">
-        {% endif %}
-    </li>
-{% endfor %}
+            <ol>
+                {% for group_and_avg_mood in group_ranks %}
+                <li class="d-flex justify-content-between">
+                    <span>{{ group_and_avg_mood.0.name }} - Moyenne : {{ group_and_avg_mood.1|floatformat:2 }}</span>
+                    {% if group_and_avg_mood.0 == best_group %}
+                    <img src="{% static 'images/crown.png' %}" alt="Leader"
+                        style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">
+                    {% endif %}
+                </li>
+                {% endfor %}
 
-                </ol>
+            </ol>
             {% else %}
-                <p>Aucun groupe trouvé.</p>
+            <p>Aucun groupe trouvé.</p>
             {% endif %}
+            <div class="mt-4 text-center">
+                <a href="{% url 'rankings_users' %}" class="btn btn-success">Accéder au classement</a>
+            </div>
         </div>
     </div>
 
     <!-- Classement des Utilisateurs -->
+    
     <div class="card shadow mb-4">
         <div class="card-header text-white" style="background-color: #A3C4BC;">
             <h3 class="card-title text-center">Classement des Utilisateurs</h3>
         </div>
         <div class="card-body">
             {% if user_ranks %}
-                <ol>
-                    {% for user_and_avg_mood in user_ranks %}
-    <li class="d-flex justify-content-between">
-        <span>{{ user_and_avg_mood.0 }} - Moyenne : {{ user_and_avg_mood.1|floatformat:2 }}</span>
-        {% if rank == 1 %}
-            <img src="{% static 'images/crown.png' %}" alt="Leader" style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">
-        {% endif %}
-    </li>
-{% endfor %}
+            <ol>
+                {% for user_and_avg_mood in user_ranks %}
+                <li class="d-flex justify-content-between">
+                    <span>{{ user_and_avg_mood.0 }} - Moyenne : {{ user_and_avg_mood.1|floatformat:2 }}</span>
+                    {% if user_and_avg_mood.0 == best_user %}
+                    <img src="{% static 'images/crown.png' %}" alt="Leader"
+                        style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">
+                    {% endif %}
+                </li>
+                {% endfor %}
 
-                </ol>
+            </ol>
             {% else %}
-                <p>Aucun utilisateur trouvé.</p>
+            <p>Aucun utilisateur trouvé.</p>
             {% endif %}
+            <div class="mt-4 text-center">
+                <a href="{% url 'rankings_groups' %}" class="btn btn-success">Accéder au classement</a>
+            </div>
         </div>
     </div>
-    
-    
+
+
 
     <!-- Button for refreshing rankings -->
     <div class="text-center mt-4">

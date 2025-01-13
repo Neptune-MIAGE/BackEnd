@@ -110,4 +110,18 @@ class MoodRanking(models.Model):
         groups_with_avg = MoodGroup.objects.annotate(avg_mood=Avg("users__user_moods__note")).order_by("-avg_mood")
         return [(group, group.average_mood or 0) for group in groups_with_avg]
 
-    
+    @staticmethod
+    def get_best_user():
+        """
+        Retourne l'utilisateur avec le meilleur mood (moyenne la plus haute).
+        """
+        best_user = CustomUser.objects.annotate(avg_mood=Avg("user_moods__note")).order_by("-avg_mood").first()
+        return best_user
+
+    @staticmethod
+    def get_best_group():
+        """
+        Retourne le groupe avec le meilleur mood (moyenne la plus haute).
+        """
+        best_group = MoodGroup.objects.annotate(avg_mood=Avg("users__user_moods__note")).order_by("-avg_mood").first()
+        return best_group

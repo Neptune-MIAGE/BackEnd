@@ -19,6 +19,7 @@ urlpatterns = [
 
     #routes liées au ranking
     path('rankings/', views.rankings_list, name='rankings'),
-
+    path('rankings/users',views.rankings_users, name = 'rankings_users'),
+    path('rankings/groups',views.rankings_groups, name = 'rankings_groups'),
 
 ]

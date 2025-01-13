@@ -1,6 +1,46 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<div class="container py-5">
 
+    <!-- Classement des Groupes -->
+    <div class="card shadow mb-4">
+        <div class="card-header text-white" style="background-color: #A3C4BC;">
+            <h3 class="card-title text-center">Classement des Groupes</h3>
+        </div>
+        <div class="card-body">
+            {% if group_ranks %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Utilisateur</th>
+                        <th>Moyenne</th>
+                        <th></th> <!-- Colonne pour l'icône de leader -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group_and_avg_mood in group_ranks %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td> <!-- Affiche le numéro de classement -->
+                        <td>{{ group_and_avg_mood.0 }} <!-- Nom de l'utilisateur -->
 
-{% endblock %}
+                            {% if group_and_avg_mood.0 == best_group %}
+                            <img src="{% static 'images/crown.png' %}" alt="Leader"
+                                style="width: 20px; height: 20px; vertical-align: middle;">
+                            {% endif %}
+                        </td>
+                        <td>{{ group_and_avg_mood.1|floatformat:2 }}</td> <!-- Moyenne avec 2 décimales -->
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Aucun groupe trouvé.</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% endblock %}

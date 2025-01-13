@@ -27,7 +27,7 @@
             <p>Aucun groupe trouvé.</p>
             {% endif %}
             <div class="mt-4 text-center">
-                <a href="{% url 'rankings_users' %}" class="btn btn-success">Accéder au classement</a>
+                <a href="{% url 'rankings_groups' %}" class="btn btn-success">Accéder au classement</a>
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
             <ol>
                 {% for user_and_avg_mood in user_ranks %}
                 <li class="d-flex justify-content-between">
-                    <span>{{ user_and_avg_mood.0 }} - Moyenne : {{ user_and_avg_mood.1|floatformat:2 }}</span>
+                    <span>{{ forloop.counter }} / {{ user_and_avg_mood.0 }} - Moyenne : {{ user_and_avg_mood.1|floatformat:2 }}</span>
                     {% if user_and_avg_mood.0 == best_user %}
                     <img src="{% static 'images/crown.png' %}" alt="Leader"
                         style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">
@@ -56,7 +56,7 @@
             <p>Aucun utilisateur trouvé.</p>
             {% endif %}
             <div class="mt-4 text-center">
-                <a href="{% url 'rankings_groups' %}" class="btn btn-success">Accéder au classement</a>
+                <a href="{% url 'rankings_users' %}" class="btn btn-success">Accéder au classement</a>
             </div>
         </div>
     </div>
@@ -69,5 +69,8 @@
     </div>
 
 </div>
+
+
+
 
 {% endblock %}

@@ -31,6 +31,8 @@
                         {% endif %}
                     </td>
                     <td>{{ user_and_avg_mood.1|floatformat:2 }}</td> <!-- Moyenne avec 2 décimales -->
+                    <td> <a href="{% url 'user_details' user_and_avg_mood.2 %}" class="btn btn-primary btn-sm">Voir l'utilisateur</a> </td>
+
                     
                 </tr>
                 {% endfor %}

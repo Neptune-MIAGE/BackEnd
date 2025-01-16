@@ -21,5 +21,7 @@ urlpatterns = [
     path('rankings/', views.rankings_list, name='rankings'),
     path('rankings/users',views.rankings_users, name = 'rankings_users'),
     path('rankings/groups/',views.rankings_groups, name = 'rankings_groups'),
+    path('user/details/<int:user_id>/', views.user_details, name='user_details'),
+
 
 ]

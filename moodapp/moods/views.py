@@ -249,3 +249,13 @@ def rankings_groups(request):
     return render(request, 'moods/rankings_groups.html', context )
 
 
+@login_required
+def user_details(request, user_id):
+    # Récupère l'utilisateur correspondant à l'id
+    user = get_object_or_404(CustomUser, id=user_id)
+    
+    # Crée le contexte avec les informations de l'utilisateur
+    context = {
+        'user': user,
+    }
+    return render(request, 'moods/user_details.html', context)

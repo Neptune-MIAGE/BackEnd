@@ -241,17 +241,11 @@ def rankings_users(request):
 @login_required
 def rankings_groups(request):
     groups_ranks = MoodRanking.rank_groups # Récupère tous les groupes
-    best_group = MoodRanking.get_best_group()
-    groups_id = [group.id for group in MoodGroup.objects.all()]
-    
-
-    
-    
-
+    best_group = MoodRanking.get_best_group()    
     context = {
         'group_ranks': groups_ranks,
         'best_group': best_group,
-        'groups_id':groups_id,
-        
     }
     return render(request, 'moods/rankings_groups.html', context )
+
+

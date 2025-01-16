@@ -17,7 +17,6 @@
                         <th>Utilisateur</th>
                         <th>Moyenne</th>
                         <th></th> <!-- Colonne pour l'icône de leader -->
-                        <th>ID</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,8 +33,7 @@
                             {% endif %}
                         </td>
                         <td>{{ group_and_avg_mood.1|floatformat:2 }}</td> <!-- Moyenne avec 2 décimales -->
-                        <td> <a href="" class="btn btn-primary btn-sm">Voir les statistiques</a> </td>
-                        {{ groups_id.forloop.counter.0 }}
+                        <td> <a href="{% url 'group_stats' group_and_avg_mood.2 %}" class="btn btn-primary btn-sm">Voir le groupe</a> </td>
                     </tr>
                     
                     {% endfor %}
@@ -47,46 +45,6 @@
 
         </div>
     </div>
-
-
-
-
-
-    <div class="card-body">
-        {% if group_ranks %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Utilisateur</th>
-                    <th>Moyenne</th>
-                    <th></th> <!-- Colonne pour l'icône de leader -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for ids in groups_id %}
-                
-                <tr >
-                    <td>{{ ids }}</td> <!-- Affiche le numéro de classement -->
-                    <td>{{ group_and_avg_mood.0 }} <!-- Nom de l'utilisateur -->
-
-                        {% if group_and_avg_mood.0 == best_group %}
-                        <img src="{% static 'images/crown.png' %}" alt="Leader"
-                            style="width: 20px; height: 20px; vertical-align: middle;">
-                        {% endif %}
-                    </td>
-                    <td>{{ group_and_avg_mood.1|floatformat:2 }}</td> <!-- Moyenne avec 2 décimales -->
-                    <td> <a href="" class="btn btn-primary btn-sm">Voir les statistiques</a> </td>
-                </tr>
-                
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>Aucun groupe trouvé.</p>
-        {% endif %}
-
-    </div>
-</div>
+              
 
     {% endblock %}

@@ -100,7 +100,7 @@ class MoodRanking(models.Model):
         Retourne une liste triée de tuples : (utilisateur, moyenne).
         """
         users_with_avg = CustomUser.objects.annotate(avg_mood=Avg("user_moods__note")).order_by("-avg_mood")
-        return [(user, user.average_mood or 0) for user in users_with_avg]
+        return [(user, user.average_mood or 0, user.id) for user in users_with_avg]
 
     def rank_groups():
         """
@@ -108,7 +108,7 @@ class MoodRanking(models.Model):
         Retourne une liste triée de tuples : (groupe, moyenne).
         """
         groups_with_avg = MoodGroup.objects.annotate(avg_mood=Avg("users__user_moods__note")).order_by("-avg_mood")
-        return [(group, group.average_mood or 0) for group in groups_with_avg]
+        return [(group, group.average_mood or 0,group.id) for group in groups_with_avg]
 
     @staticmethod
     def get_best_user():

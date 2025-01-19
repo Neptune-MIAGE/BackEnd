@@ -17,36 +17,24 @@ def list_moods(request):
     moods = Mood.objects.all()  # Récupère tous les moods
     return render(request, 'moods/choose_mood.html', {'moods': moods})
 
+# Vue pour ajouter une humeur pour l'utilisateur connecté
 @login_required
 def add_user_mood(request):
     if request.method == "POST":
         # Récupère l'utilisateur connecté et le mood choisi
         mood_id = request.POST.get("mood_id")
-        note = request.POST.get("note", "").strip()  # Récupère la note et supprime les espaces
-        weather_condition = request.POST.get("weather_condition", "")
-
         if mood_id:
-            # Récupère l'humeur associée à l'ID
             mood = get_object_or_404(Mood, id=mood_id)
+            UserMood.objects.create(user=request.user, mood=mood)
 
-            # Si la note est vide, on peut la remplacer par une valeur par défaut
-            if not note:
-                note = "Aucune note"
-
-            # Crée un enregistrement dans UserMood avec l'humeur, la note et la condition météo
-            UserMood.objects.create(user=request.user, mood=mood, note=note, weather_condition=weather_condition)
-
-        # Redirige vers la page des humeurs de l'utilisateur après l'enregistrement
-        return redirect('user_moods_page')
-
-
+        # Redirige directement vers la page du graphique des humeurs après enregistrement
+        return redirect('user_moods_page')  
     if request.method == "GET":
-        # Récupère tous les moods disponibles
-        moods = Mood.objects.all()
+        moods = Mood.objects.all()  # Récupère tous les moods
         return render(request, 'moods/choose_mood.html', {'moods': moods})
-
-    # Si la méthode n'est pas POST ou GET, retourne une erreur
+    # Si la méthode n'est pas POST, retourne une erreur
     return JsonResponse({"error": "Méthode non autorisée."}, status=405)
+
 # Vue pour récupérer les humeurs d’un utilisateur
 
 @login_required

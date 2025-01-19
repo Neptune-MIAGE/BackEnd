@@ -1,31 +1,28 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="container py-5">
     <h1 class="text-center mb-4">Comment vous sentez-vous aujourd'hui ?</h1>
+
+    <!-- Zone pour afficher la suggestion d'humeur -->
+    <div id="suggested-mood" class="alert alert-info text-center d-none">
+        <strong>Suggestion :</strong> Chargement de votre humeur recommandée...
+    </div>
+
     <form method="post" action="{% url 'add_user_mood' %}" class="p-4 shadow bg-white rounded mx-auto" style="max-width: 500px;">
         {% csrf_token %}
-        
-        <!-- Sélection de l'humeur -->
         <div class="mb-3">
-            <label for="mood" class="form-label"><i class="fas fa-smile"></i> Choisissez une humeur :</label>
+            <label for="mood" class="form-label">Choisissez une humeur :</label>
             <select name="mood_id" id="mood" class="form-select">
                 {% for mood in moods %}
                 <option value="{{ mood.id }}">{{ mood.name }}</option>
                 {% endfor %}
             </select>
         </div>
-        
-        <!-- Champ pour la note/commentaire -->
-        <div class="mb-3">
-            <label for="note" class="form-label">Note / Commentaire :</label>
-            <textarea id="note" name="note" class="form-control" rows="3" placeholder="Qu'est-ce qui a influencé votre humeur aujourd'hui ?"></textarea>
-        </div>
-
-        <!-- Bouton pour soumettre le formulaire -->
-        <button type="submit" class="btn btn-primary w-100">
-            <i class="fas fa-save"></i> Enregistrer
-        </button>
+        <button type="submit" class="btn btn-primary w-100">Enregistrer</button>
     </form>
 </div>
+
+<!-- Inclure le fichier JavaScript -->
+<script src="{% static 'js/mood.js' %}"></script>
 {% endblock %}

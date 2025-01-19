@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             callbacks: {
                                 label: function(context) {
                                     const moodName = Object.keys(moodMapping).find(key => moodMapping[key] === context.raw);
-                                    return `${moodEmojis[moodName]} ${moodName}`;
+                                    return `${moodEmojis[moodName]} ${moodName}`; // Correction ici
                                 }
                             }
                         }
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = '#333';
-                    ctx.fillText(`${totalMoods}`, width / 2, chart.chartArea.height / 2 + chart.chartArea.top);
+                    ctx.fillText(`${totalMoods}`, width / 2, chart.chartArea.height / 2 + chart.chartArea.top); // Correction ici
                     ctx.restore();
                 }
             };
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 new Chart(arcCtx.getContext('2d'), {
                     type: 'doughnut',
                     data: {
-                        labels: moodArcLabels.map(label => `${moodEmojis[label]} ${label}`),
+                        labels: moodArcLabels.map(label => `${moodEmojis[label]} ${label}`), // Correction ici
                         datasets: [{
                             label: 'Répartition des Humeurs',
                             data: moodArcData,
@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 callbacks: {
                                     label: function(context) {
                                         const moodName = context.label.split(' ')[1];
-                                        return `${moodEmojis[moodName]} ${moodName}: ${context.raw}`;
+                                        return `${moodEmojis[moodName]} ${moodName}: ${context.raw}`; // Correction ici
                                     }
                                 }
                             }

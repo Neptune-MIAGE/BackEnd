@@ -35,4 +35,4 @@ deactivate
 Voila toutes les dépendances installées et le serveur lancé à l'adresse http://127.0.0.1:8000/
 
 # Vidéo de présentation : 
-https://youtu.be/FyoL7CcDvc0
+[https://youtu.be/FyoL7CcDvc0](https://youtu.be/texZZWZkCDI)

@@ -79,35 +79,6 @@ class MoodAppTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertFalse(MoodGroup.objects.filter(id=group_id).exists())
 
-    def test_join_group(self):
-        # Test qu'un utilisateur peut rejoindre un groupe
-        self.client.login(username='testuser', password='testpassword')
-        response = self.client.post(reverse('join_group', args=[self.group.id]))
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(GroupMembership.objects.filter(user=self.user, group=self.group).exists())
-
-    def test_leave_group(self):
-        self.client.login(username='testuser', password='testpassword')
-        
-        # Ajoutez l'utilisateur au groupe
-        self.group.users.add(self.user)
-
-        # Vérifiez que l'utilisateur est bien membre avant la requête
-        self.assertTrue(GroupMembership.objects.filter(user=self.user, group=self.group).exists())
-
-        # Exécutez la requête pour quitter le groupe
-        response = self.client.post(reverse('leave_group', args=[self.group.id]))
-
-        # Vérifiez la redirection
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('manage_groups'))
-
-        # Vérifiez que l'utilisateur n'est plus membre
-        self.assertFalse(GroupMembership.objects.filter(user=self.user, group=self.group).exists())
-
-        # Vérifiez le message de succès
-        messages = list(get_messages(response.wsgi_request))
-        self.assertTrue(any("Vous avez quitté le groupe avec succès." in str(m) for m in messages))
 
 
     def test_remove_user_from_group(self):

@@ -115,7 +115,7 @@ def leave_group(request, group_id):
     # Vérification si l'utilisateur est le leader
     if group.leader == request.user:
         messages.error(request, "Impossible de quitter le groupe en tant que leader. Transférez le rôle ou supprimez le groupe.")
-        return redirect('group_stats', group_id=group.id)
+        return redirect('manage_groups', group_id=group.id)
 
     membership = GroupMembership.objects.filter(user=request.user, group=group).first()
 

@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from .models import UserMood
 from django.db.models import Avg
 from statistics import median
+from datetime import datetime, timedelta
 
 
 # Vue pour afficher la liste des humeurs disponibles
@@ -16,24 +17,54 @@ from statistics import median
 def list_moods(request):
     moods = Mood.objects.all()  # Récupère tous les moods
     return render(request, 'moods/choose_mood.html', {'moods': moods})
+@login_required
+def mood_streak(request):
+    moods = UserMood.objects.filter(user=request.user).order_by('-date')
 
+    streak = 0
+    previous_date = None
+
+    for mood in moods:
+        mood_date = mood.date.date()
+        
+        # Premier jour du streak
+        if previous_date is None:
+            streak = 1
+        elif previous_date - mood_date == timedelta(days=1):  # Jour précédent
+            streak += 1
+        else:
+            break  # Fin du streak
+
+        previous_date = mood_date
+
+    return JsonResponse({"streak": streak})
 # Vue pour ajouter une humeur pour l'utilisateur connecté
 @login_required
 def add_user_mood(request):
     if request.method == "POST":
-        # Récupère l'utilisateur connecté et le mood choisi
         mood_id = request.POST.get("mood_id")
-        if mood_id:
-            mood = get_object_or_404(Mood, id=mood_id)
-            UserMood.objects.create(user=request.user, mood=mood)
+        note = request.POST.get("note", "").strip()  # Récupère la note et supprime les espaces
+        weather_condition = request.POST.get("weather_condition", "")
 
-        # Redirige directement vers la page du graphique des humeurs après enregistrement
-        return redirect('user_moods_page')  
+        if mood_id:
+            # Récupère l'humeur associée à l'ID
+            mood = get_object_or_404(Mood, id=mood_id)
+
+            # Si la note est vide, on peut la remplacer par une valeur par défaut
+            if not note:
+                note = "Aucune note"
+
+            # Crée un enregistrement dans UserMood avec l'humeur, la note et la condition météo
+            UserMood.objects.create(user=request.user, mood=mood, note=note, weather_condition=weather_condition)
+
+        return redirect('user_moods_page')  # Redirige vers la page des humeurs de l'utilisateur après l'enregistrement
+
     if request.method == "GET":
-        moods = Mood.objects.all()  # Récupère tous les moods
+        moods = Mood.objects.all()
         return render(request, 'moods/choose_mood.html', {'moods': moods})
-    # Si la méthode n'est pas POST, retourne une erreur
+
     return JsonResponse({"error": "Méthode non autorisée."}, status=405)
+
 
 # Vue pour récupérer les humeurs d’un utilisateur
 
@@ -59,8 +90,8 @@ def user_moods_page(request):
 
 
 def user_moods_json(request):
-    user_moods = UserMood.objects.filter(user=request.user).values('date', 'mood__name', 'note')
-    return JsonResponse(list(user_moods), safe=False)
+    moods = UserMood.objects.filter(user=request.user).values('date', 'mood__name')
+    return JsonResponse(list(moods), safe=False)
 
 
 # Vue pour créer un groupe d'humeurs

@@ -6,6 +6,10 @@ urlpatterns = [
     path('add/', views.add_user_mood, name='add_user_mood'),  # Ajouter une humeur
     path('user/', views.user_moods, name='user_moods'),  # API pour le JSON
     path('user/page/', views.user_moods_page, name='user_moods_page'),  # Page HTML
+    path('user_moods_json/', views.user_moods_json, name='user_moods_json'),  # API pour le JSON
+    path('user_moods_page/', views.user_moods_page, name='user_moods_page'),  # Page HTML
+    path('mood_streak/', views.mood_streak, name='mood_streak'),
+
     
     # Routes liées aux groupes
     path('groups/', views.manage_groups, name='manage_groups'),

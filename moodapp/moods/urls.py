@@ -9,6 +9,7 @@ urlpatterns = [
     path('user_moods_json/', views.user_moods_json, name='user_moods_json'),  # API pour le JSON
     path('user_moods_page/', views.user_moods_page, name='user_moods_page'),  # Page HTML
     path('mood_streak/', views.mood_streak, name='mood_streak'),
+    path("moods/trends/", views.mood_trends, name="mood_trends"),
 
     
     # Routes liées aux groupes

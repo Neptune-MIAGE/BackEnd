@@ -10,6 +10,9 @@ from .models import UserMood
 from django.db.models import Avg
 from statistics import median
 from datetime import datetime, timedelta
+from django.db.models import Count
+from django.utils.timezone import now
+
 
 
 # Vue pour afficher la liste des humeurs disponibles
@@ -17,6 +20,22 @@ from datetime import datetime, timedelta
 def list_moods(request):
     moods = Mood.objects.all()  # Récupère tous les moods
     return render(request, 'moods/choose_mood.html', {'moods': moods})
+
+def mood_trends(request):
+    today = now().date()
+    start_date = today - timedelta(days=30)  # Analyse sur les 30 derniers jours
+
+    trends = UserMood.objects.filter(date__gte=start_date).values("date", "mood__name") \
+        .annotate(count=Count("mood")).order_by("date")
+
+    trend_data = {}
+    for entry in trends:
+        date_str = entry["date"].strftime("%Y-%m-%d")
+        if date_str not in trend_data:
+            trend_data[date_str] = {}
+        trend_data[date_str][entry["mood__name"]] = entry["count"]
+
+    return JsonResponse(trend_data)
 @login_required
 def mood_streak(request):
     moods = UserMood.objects.filter(user=request.user).order_by('-date')
@@ -82,6 +101,27 @@ def user_moods(request):
     
     # Retourner les données JSON
     return JsonResponse(user_moods_list, safe=False)
+
+@login_required
+def mood_trends(request):
+    # Filtrer les humeurs des 30 derniers jours
+    thirty_days_ago = timezone.now() - timezone.timedelta(days=30)
+    moods = (
+        UserMood.objects.filter(user=request.user, date__gte=thirty_days_ago)
+        .values("date__date", "mood__name")
+        .annotate(count=Count("mood"))
+        .order_by("date__date")
+    )
+
+    # Structurer les données
+    trends = {}
+    for entry in moods:
+        date = entry["date__date"].strftime("%Y-%m-%d")
+        if date not in trends:
+            trends[date] = {}
+        trends[date][entry["mood__name"]] = entry["count"]
+
+    return JsonResponse(trends)
 
 
 @login_required

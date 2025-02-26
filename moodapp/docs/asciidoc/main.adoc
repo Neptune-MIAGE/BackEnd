@@ -92,3 +92,23 @@ image::images/screenshotFeature4_2.png[]
 Screenshot n°3 : 
 
 image::images/screenshotFeature4_3.png[]
+
+
+
+=== Analyse and personnalized advices on mood trends
+Objective: Provide intelligent feedback on the evolution of moods with suggestions/actions
+
+What this adds:
+
+Detection of trends (e.g., “You've often been Happy these last few days, keep it up!”)
+Analysis of triggers (e.g., “When it rains, you're more often Sad”)
+Personalized advice (e.g., “You've had several Sad days in a row, try doing something you enjoy today”)
+Visualization with colors/tags (e.g., periods of stress, peaks of happiness, etc.)
+
+Screenshot n°1 : 
+
+image::images/screenshotFeature5.png[]
+
+Screenshot n°2 : 
+
+image::images/screenshotFeature6.png[]

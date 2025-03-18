@@ -1,9 +1,9 @@
+/* Amélioration des cartes */
 .card {
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
 }
-
 .card:hover {
     transform: scale(1.02);
 }
@@ -37,4 +37,64 @@
     align-items: center;
     flex-direction: column;
     gap: 2rem;
+}
+
+/* Streak et humeur du jour */
+.alert {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    animation: fadeIn 0.6s ease-in-out forwards;
+}
+
+/* Gradient en fonction de l'humeur */
+.alert-happy {
+    background: linear-gradient(135deg, #d4fc79, #96e6a1);
+    border-left: 5px solid #4CAF50;
+}
+.alert-neutral {
+    background: linear-gradient(135deg, #f3f3f3, #d4d4d4);
+    border-left: 5px solid #808080;
+}
+.alert-sad {
+    background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+    border-left: 5px solid #ff4081;
+}
+
+/* Effet d'apparition */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Formulaire amélioré */
+form {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Dropdown des humeurs avec emojis */
+.form-select {
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+.form-select:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+/* Bouton d'enregistrement dynamique */
+.btn-primary {
+    background: linear-gradient(135deg, #4CAF50, #81C784);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+.btn-primary:hover {
+    background: linear-gradient(135deg, #388E3C, #66BB6A);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }

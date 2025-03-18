@@ -9,7 +9,13 @@ from django.http import JsonResponse
 from .models import UserMood
 from django.db.models import Avg
 from statistics import median
+<<<<<<< HEAD
 from django.http import HttpResponse
+=======
+from datetime import datetime, timedelta
+from django.db.models import Count
+from django.utils.timezone import now
+>>>>>>> develop
 
 
 
@@ -19,23 +25,69 @@ def list_moods(request):
     moods = Mood.objects.all()  # Récupère tous les moods
     return render(request, 'moods/choose_mood.html', {'moods': moods})
 
+def mood_trends(request):
+    today = now().date()
+    start_date = today - timedelta(days=30)  # Analyse sur les 30 derniers jours
+
+    trends = UserMood.objects.filter(date__gte=start_date).values("date", "mood__name") \
+        .annotate(count=Count("mood")).order_by("date")
+
+    trend_data = {}
+    for entry in trends:
+        date_str = entry["date"].strftime("%Y-%m-%d")
+        if date_str not in trend_data:
+            trend_data[date_str] = {}
+        trend_data[date_str][entry["mood__name"]] = entry["count"]
+
+    return JsonResponse(trend_data)
+@login_required
+def mood_streak(request):
+    moods = UserMood.objects.filter(user=request.user).order_by('-date')
+
+    streak = 0
+    previous_date = None
+
+    for mood in moods:
+        mood_date = mood.date.date()
+        
+        # Premier jour du streak
+        if previous_date is None:
+            streak = 1
+        elif previous_date - mood_date == timedelta(days=1):  # Jour précédent
+            streak += 1
+        else:
+            break  # Fin du streak
+
+        previous_date = mood_date
+
+    return JsonResponse({"streak": streak})
 # Vue pour ajouter une humeur pour l'utilisateur connecté
 @login_required
 def add_user_mood(request):
     if request.method == "POST":
-        # Récupère l'utilisateur connecté et le mood choisi
         mood_id = request.POST.get("mood_id")
-        if mood_id:
-            mood = get_object_or_404(Mood, id=mood_id)
-            UserMood.objects.create(user=request.user, mood=mood)
+        note = request.POST.get("note", "").strip()  # Récupère la note et supprime les espaces
+        weather_condition = request.POST.get("weather_condition", "")
 
-        # Redirige directement vers la page du graphique des humeurs après enregistrement
-        return redirect('user_moods_page')  
+        if mood_id:
+            # Récupère l'humeur associée à l'ID
+            mood = get_object_or_404(Mood, id=mood_id)
+
+            # Si la note est vide, on peut la remplacer par une valeur par défaut
+            if not note:
+                note = "Aucune note"
+
+            # Crée un enregistrement dans UserMood avec l'humeur, la note et la condition météo
+            UserMood.objects.create(user=request.user, mood=mood, note=note, weather_condition=weather_condition)
+
+        return redirect('user_moods_page')  # Redirige vers la page des humeurs de l'utilisateur après l'enregistrement
+
     if request.method == "GET":
-        moods = Mood.objects.all()  # Récupère tous les moods
+        moods = Mood.objects.all()
         return render(request, 'moods/choose_mood.html', {'moods': moods})
-    # Si la méthode n'est pas POST, retourne une erreur
+
     return JsonResponse({"error": "Méthode non autorisée."}, status=405)
+
 
 # Vue pour récupérer les humeurs d’un utilisateur
 
@@ -54,6 +106,27 @@ def user_moods(request):
     # Retourner les données JSON
     return JsonResponse(user_moods_list, safe=False)
 
+@login_required
+def mood_trends(request):
+    # Filtrer les humeurs des 30 derniers jours
+    thirty_days_ago = timezone.now() - timezone.timedelta(days=30)
+    moods = (
+        UserMood.objects.filter(user=request.user, date__gte=thirty_days_ago)
+        .values("date__date", "mood__name")
+        .annotate(count=Count("mood"))
+        .order_by("date__date")
+    )
+
+    # Structurer les données
+    trends = {}
+    for entry in moods:
+        date = entry["date__date"].strftime("%Y-%m-%d")
+        if date not in trends:
+            trends[date] = {}
+        trends[date][entry["mood__name"]] = entry["count"]
+
+    return JsonResponse(trends)
+
 
 @login_required
 def user_moods_page(request):
@@ -61,8 +134,8 @@ def user_moods_page(request):
 
 
 def user_moods_json(request):
-    user_moods = UserMood.objects.filter(user=request.user).values('date', 'mood__name', 'note')
-    return JsonResponse(list(user_moods), safe=False)
+    moods = UserMood.objects.filter(user=request.user).values('date', 'mood__name')
+    return JsonResponse(list(moods), safe=False)
 
 
 # Vue pour créer un groupe d'humeurs
@@ -117,7 +190,7 @@ def leave_group(request, group_id):
     # Vérification si l'utilisateur est le leader
     if group.leader == request.user:
         messages.error(request, "Impossible de quitter le groupe en tant que leader. Transférez le rôle ou supprimez le groupe.")
-        return redirect('group_stats', group_id=group.id)
+        return redirect('manage_groups', group_id=group.id)
 
     membership = GroupMembership.objects.filter(user=request.user, group=group).first()
 

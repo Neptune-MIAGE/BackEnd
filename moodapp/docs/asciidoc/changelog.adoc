@@ -1,0 +1,136 @@
+= Changelog
+:doctype: article
+:toc: left
+:toclevels: 3
+
+== [V1.0.0] – 23/02/2025
+
+=== Changements importants depuis la dernière version
+*(Aucun changement spécifique mentionné)*
+
+=== Bugs corrigés :
+* Bugs d’affichage sur la feature 2
+
+=== Nouvelles features
+
+==== Grandes features :
+* Feature 5 : Analyse et conseils personnalisés sur les tendances d’humeur
+
+==== Petites features :
+* Suivi des streaks / humeur du jour
+
+=== Problèmes rencontrés :
+* Les tests passent tous mais Sonar ne les détecte pas, nous n’avons pas réussi à régler le problème
+
+=== Répartition du travail :
+* Suivi des streaks / humeur du jour : Yassine Benabdelkader  
+* Analyse et conseils personnalisés sur les tendances d’humeur : Kévin Soares  
+* Changelog : Romain Thomas  
+* Documentation Asciidoctor et vidéo présentation : Romain Thomas
+
+== [V0.3.0] – 22/01/2025
+
+=== Changements importants depuis la dernière version
+* Ajouts des tests
+
+=== Bugs corrigés :
+* (Aucun bug corrigé mentionné)
+
+=== Nouvelles features
+
+==== Grandes features :
+* Feature 3 : Système de classements  
+* Feature 4 : Système de groupes 
+
+==== Petites features :
+* Carte utilisateur visible à tous  
+* Amélioration de feature existante : ajout de commentaires pour chaque mood
+
+=== Problèmes rencontrés :
+* Tests non détectés par sonarcloud
+
+=== Répartition du travail
+* Système de classements : Romain Thomas  
+* Système de groupe : Kévin Soares  
+* Carte utilisateur : Romain Thomas  
+* Amélioration de feature existante : Yassine Benabdelkader  
+* Documentation Asciidoctor et vidéo présentation : Romain Thomas  
+* Tests : Kévin Soares / Romain Thomas
+
+== [V0.2.0] – 20/12/2024
+
+=== Changements importants depuis la dernière version :
+* Ajout d’un script pour lancer le projet automatiquement (Windows/Linux/MacOS)  
+* Ajout d’une page pour gérer la connexion / création de compte
+
+=== Bugs corrigés :
+* Problèmes sur les superusers et les données de démarrage
+
+=== Nouvelles features
+
+==== Grandes features :
+* Feature 1 : Suivi et affichage des humeurs avec graphiques  
+* Feature 2 : Suggestion de mood selon la météo du jour (basé sur l’API OpenMeteo)
+
+=== Problèmes rencontrés :
+* (Aucun problème mentionné)
+
+=== Répartition du travail :
+* Suivi et affichage des humeurs avec graphiques : Ryad Messaoudi  
+* Suggestion de mood selon la météo : Yassine Benadelkader  
+* Documentation Asciidoctor et vidéo présentation : Romain Thomas  
+* Gestion des comptes : Kévin Soares  
+* Configuration projet / script de lancement : Kévin Soares
+
+== [V0.0.1] – 12/12/2024
+
+* Mise en place du projet  
+* Configuration de l’environnement Django (Python)  
+* Ajout de badges Django CI et badges SonarCloud  
+* Création de superUsers et des données de démarrage
+
+== Répartition globale du travail :
+
+[cols="1,1", options="header"]
+|===
+|Fonctionnalité |Contributeurs
+
+|Suivi et affichage des humeurs avec graphiques
+|Ryad Messaoudi
+
+|Suggestion de mood selon la météo du jour
+|Yassine Benabdelkader
+
+|Page de connexion / inscription
+|Kévin Soares
+
+|Système de classements
+|Romain Thomas
+
+|Système de groupes
+|Kévin Soares
+
+|Carte de visite utilisateur
+|Romain Thomas
+
+|Amélioration de feature : commentaire
+|Yassine Benabdelkader
+
+|Suivi des streaks / humeur du jour
+|Yassine Benabdelkader
+
+|Analyse et conseils personnalisés sur les tendances d’humeur
+|Yassine Benabdelkader
+
+|Configuration projet / script de lancement
+|Kévin Soares
+
+|Tests
+|Kévin Soares / Romain Thomas
+
+|Gestion du Kanban
+|Kévin Soares / Romain Thomas / Yassine Benadelkader
+
+|Documentation (changelog, asciidoctor, vidéo)
+|Romain Thomas
+|===

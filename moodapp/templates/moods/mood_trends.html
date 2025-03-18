@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">📊 Analyse des tendances d'humeur</h1>
+
+<div class="card shadow mb-4">
+    <div class="card-header text-white" style="background-color: #5D9CEC;">
+        <h3 class="card-title text-center">Tendances des Humeurs</h3>
+    </div>
+    <div class="card-body">
+        <canvas id="moodTrendsChart" style="width: 100%; height: 400px;"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/moods_chart.js' %}"></script>
+{% endblock %}

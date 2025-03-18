@@ -20,7 +20,7 @@ Use Git to clone the project on your computer.
 1. Open terminal  
 2. Whether you have a Mac/Linux or a Windows, you should only need to run a script to get started.
 
-See README.md on branch main for commands needeed to run the project.
+See README.md on branch main for commands needed to run the project.
 
 [Access repository] https://github.com/Neptune-MIAGE/BackEnd
 
@@ -33,6 +33,8 @@ A chart is created with the user's moods, showing the evolution of the mood.
 
 There are also smileys counters and a pie chart that show the number and repartition of the previous entered moods.
 
+image::images/screenshot1.jpg[]
+
 === Mood suggestion depending on the wheather
 The OpenMeteo API recovers the weather on the user, depending on his location (for now, the default location is Paris).
 
@@ -42,10 +44,71 @@ The user can follow or not the mood suggestion when he adds his mood.
 
 The current weather is saved when adding a mood. This will be helpful for improving or creating future features.
 
-=== Screenshots
-
-==== See mood suggestion and add mood
-image::images/screenshot1.jpg[]
-
-==== See mood evolution and informations
 image::images/screenshot2.jpg[]
+
+
+=== Users groups
+You can create users groups.
+
+Every group has it's own name, description, stats and users list.
+
+The stats calculated for now are the average and median mood of the group.
+
+The group creator is leader by default. The leader can name another member of the group as new leader to replace him, so the ex-leader is now only a member.
+
+You can join or leave a group.
+
+If you're the leader, you have to name someone else leader before leaving.
+
+If there's only one member in the group, leaving the group will delete it.
+
+Screenshot n°1 :
+
+image::images/screenshotFeature3_1.png[]
+
+Screenshot n°2 :
+
+image::images/screenshotFeature3_2.png[]
+
+
+
+=== Users and groups rankings
+Users and groups are ranked by their average mood.
+
+There's a podium for users and for groups, displaying the three bests users and the three bests groups.
+
+There is an individual page for the global users ranking, and same for the global groups rankings.
+
+You can access individual pages for each group and user. For the groups, this will take you to the group page (wether you're a member or not). For the users, this will display a "visit card" of the user with some informations about him.
+
+Screenshot n°1 : 
+
+image::images/screenshotFeature4_1.png[]
+
+Screenshot n°2 : 
+
+image::images/screenshotFeature4_2.png[]
+
+Screenshot n°3 : 
+
+image::images/screenshotFeature4_3.png[]
+
+
+
+=== Analyse and personnalized advices on mood trends
+Objective: Provide intelligent feedback on the evolution of moods with suggestions/actions
+
+What this adds:
+
+Detection of trends (e.g., “You've often been Happy these last few days, keep it up!”)
+Analysis of triggers (e.g., “When it rains, you're more often Sad”)
+Personalized advice (e.g., “You've had several Sad days in a row, try doing something you enjoy today”)
+Visualization with colors/tags (e.g., periods of stress, peaks of happiness, etc.)
+
+Screenshot n°1 : 
+
+image::images/screenshotFeature5.png[]
+
+Screenshot n°2 : 
+
+image::images/screenshotFeature6.png[]

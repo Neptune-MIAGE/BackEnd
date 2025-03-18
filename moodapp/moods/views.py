@@ -9,6 +9,8 @@ from django.http import JsonResponse
 from .models import UserMood
 from django.db.models import Avg
 from statistics import median
+from django.http import HttpResponse
+
 
 
 # Vue pour afficher la liste des humeurs disponibles
@@ -263,4 +265,23 @@ def user_details(request, user_id):
 
 @login_required
 def map_view(request):
-    return render(request, 'map.html')
+    context = {}
+    return render(request, 'moods/map.html',context)
+
+
+def map_script(request):
+    """Génère dynamiquement le script JavaScript avec les coordonnées"""
+    script_content = f"""
+    document.addEventListener("DOMContentLoaded", function () {{
+        var latitude = {48.8566};  
+        var longitude = {2.3522};  
+        var zoom = {13};  
+
+        var map = L.map('map').setView([latitude, longitude], zoom);
+
+        L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }}).addTo(map);
+    }});
+    """
+    return HttpResponse(script_content, content_type="application/javascript")

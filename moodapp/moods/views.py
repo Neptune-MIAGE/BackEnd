@@ -9,13 +9,10 @@ from django.http import JsonResponse
 from .models import UserMood
 from django.db.models import Avg
 from statistics import median
-<<<<<<< HEAD
 from django.http import HttpResponse
-=======
 from datetime import datetime, timedelta
 from django.db.models import Count
 from django.utils.timezone import now
->>>>>>> develop
 
 
 

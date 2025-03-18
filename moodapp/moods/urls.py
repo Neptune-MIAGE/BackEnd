@@ -31,7 +31,7 @@ urlpatterns = [
     #routes pour la map
     path('map/', views.map_view, name='map'),
     path('moods/map/script.js', views.map_script, name='map_script'),  # Script Leaflet
-
+   
 
 
 ]

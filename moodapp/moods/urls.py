@@ -23,5 +23,8 @@ urlpatterns = [
     path('rankings/groups/',views.rankings_groups, name = 'rankings_groups'),
     path('user/details/<int:user_id>/', views.user_details, name='user_details'),
 
+    #routes pour la map
+    path('map/', views.map_view, name='map'),
+
 
 ]

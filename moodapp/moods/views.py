@@ -259,3 +259,8 @@ def user_details(request, user_id):
         'user': user,
     }
     return render(request, 'moods/user_details.html', context)
+
+
+@login_required
+def map_view(request):
+    return render(request, 'map.html')

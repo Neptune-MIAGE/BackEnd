@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container py-5">
+    
+    
+
+
+
+
+
+
+<div class="card shadow mb-4">
+    <div class="card-header text-white" style="background-color: #A3C4BC;">
+        <h3 class="card-title text-center">Carte OpenStreetMap</h3>
+    </div>
+    <div class="card-body">
+        <div id="map" style="height: 500px;"></div>
+        <!-- Ajout de Leaflet -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="{% url 'map_script' %}"></script> <!-- Chargement du script dynamique -->
+
+
+    </div>
+</div>
+
+
+{% endblock %}

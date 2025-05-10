@@ -26,6 +26,7 @@ class Mood(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    emoji = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
@@ -125,3 +126,11 @@ class MoodRanking(models.Model):
         """
         best_group = MoodGroup.objects.annotate(avg_mood=Avg("users__user_moods__note")).order_by("-avg_mood").first()
         return best_group
+    
+
+class MapEmoji(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    emoji = models.CharField(max_length=10, default=Mood.emoji)
+    created_at = models.DateTimeField(auto_now_add=True)

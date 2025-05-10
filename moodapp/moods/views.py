@@ -1,8 +1,9 @@
+import random
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render
-from .models import CustomUser, Mood, UserMood, MoodGroup, GroupMembership, MoodRanking
+from .models import CustomUser, MapEmoji, Mood, UserMood, MoodGroup, GroupMembership, MoodRanking
 from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone  # Utilisez timezone pour garantir la bonne heure
 from django.http import JsonResponse
@@ -76,6 +77,16 @@ def add_user_mood(request):
 
             # Crée un enregistrement dans UserMood avec l'humeur, la note et la condition météo
             UserMood.objects.create(user=request.user, mood=mood, note=note, weather_condition=weather_condition)
+
+
+            # Position de référence : Université Paris Nanterre
+            base_lat = 48.90310022158126
+            base_lng = 2.2157004596174414
+            # Variation aléatoire jusqu'à ±0.0003 ~ 30 mètres environ
+            delta_lat = random.uniform(-0.0003, 0.0003)
+            delta_lng = random.uniform(-0.0003, 0.0003)
+             # Utilise le nom du mood comme emoji (ex: Happy pour "😊")
+            MapEmoji.objects.create(user=request.user,emoji=mood.emoji,  latitude=base_lat + delta_lat,  longitude=base_lng + delta_lng)
 
         return redirect('user_moods_page')  # Redirige vers la page des humeurs de l'utilisateur après l'enregistrement
 
@@ -339,19 +350,58 @@ def map_view(request):
     return render(request, 'moods/map.html',context)
 
 
+from django.http import HttpResponse
+from .models import MapEmoji
+
+from django.http import HttpResponse
+from .models import MapEmoji
+
 def map_script(request):
-    """Génère dynamiquement le script JavaScript avec les coordonnées"""
+    emojis = MapEmoji.objects.filter(user=request.user).values("latitude", "longitude", "emoji")
+
+    emoji_js_array = ",\n".join([
+        f"{{ lat: {e['latitude']}, lng: {e['longitude']}, emoji: '{e['emoji']}' }}"
+        for e in emojis
+    ])
+
     script_content = f"""
     document.addEventListener("DOMContentLoaded", function () {{
-        var latitude = {48.8566};  
-        var longitude = {2.3522};  
-        var zoom = {13};  
-
-        var map = L.map('map').setView([latitude, longitude], zoom);
+        var latitude = 48.90310022158126;
+        var longitude = 2.2157004596174414;
+        var map = L.map('map').setView([latitude, longitude], 15);
 
         L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; OpenStreetMap contributors'
         }}).addTo(map);
+
+        const markers = [
+            {emoji_js_array}
+        ];
+
+        markers.forEach(marker => {{
+            var emojiIcon = L.divIcon({{
+                className: 'emoji-marker',
+                html: `<div style="font-size: 24px;">${{marker.emoji}}</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+                popupAnchor: [0, -10]
+            }});
+
+            L.marker([marker.lat, marker.lng], {{ icon: emojiIcon }})
+                .bindPopup(marker.emoji)
+                .addTo(map);
+        }});
     }});
     """
+
     return HttpResponse(script_content, content_type="application/javascript")
+
+
+
+
+
+#Pour afficher les emojis ajoutés sur la carte 
+@login_required
+def get_map_emojis(request):
+    emojis = MapEmoji.objects.all().values("latitude", "longitude", "emoji")
+    return JsonResponse(list(emojis), safe=False)

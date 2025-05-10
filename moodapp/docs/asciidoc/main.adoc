@@ -112,3 +112,16 @@ image::images/screenshotFeature5.png[]
 Screenshot n°2 : 
 
 image::images/screenshotFeature6.png[]
+
+
+
+=== Map displaying the submitted moods
+This interactive map feature allows each user to visualize their moods as geolocated emojis on an OpenStreetMap API-based interface. Every time a user records a mood through the dedicated form, a corresponding emoji is automatically added at his GPS location (by default, Université Paris Nanterre), with slight variation to prevent overlapping markers. Emojis appear directly on the map as custom icons, replacing the standard blue markers. Each user has their own personal map: only their own mood markers are displayed, ensuring a private and personalized experience. This visual representation adds a playful and engaging layer to emotional tracking while offering a geographic view of moods over time. The map updates dynamically and instantly reflects newly submitted moods.
+
+Screenshot n°1 : 
+
+image::images/screenshotFeature7.png[]
+
+Screenshot n°2 : 
+
+image::images/screenshotFeature8.png[]

@@ -33,23 +33,23 @@ if not CustomUser.objects.filter(username='user3').exists():
 
 # Crée les moods de base
 if not Mood.objects.filter(name='Awesome').exists():
-    Mood.objects.create(name='Awesome')
+    Mood.objects.create(name='Awesome',emoji="😁")
     print("Mood 'Awesome' créé.")
 
 if not Mood.objects.filter(name='Happy').exists():
-    Mood.objects.create(name='Happy')
+    Mood.objects.create(name='Happy', emoji="😊")
     print("Mood 'Happy' créé.")
     
 if not Mood.objects.filter(name='Neutral').exists():
-    Mood.objects.create(name='Neutral')
+    Mood.objects.create(name='Neutral', emoji="😐")
     print("Mood 'Neutral' créé.") 
     
 if not Mood.objects.filter(name='Sad').exists():
-    Mood.objects.create(name='Sad')
+    Mood.objects.create(name='Sad', emoji="😢")
     print("Mood 'Sad' créé.")
     
 if not Mood.objects.filter(name='Awful').exists():
-    Mood.objects.create(name='Awful')
+    Mood.objects.create(name='Awful', emoji="😡")
     print("Mood 'Awful' créé.")
     
 ####################################################################################################

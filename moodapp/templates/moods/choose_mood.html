@@ -5,54 +5,60 @@
 <div class="container py-5">
     <h1 class="text-center mb-4">Comment vous sentez-vous aujourd'hui ?</h1>
 
+    <!-- Série -->
     <div id="mood-streak" class="alert alert-info text-center d-none">
         🔥 Série d'humeurs positives : <span id="streak-count"></span> jours consécutifs !
     </div>
-    
-    <div id="today-mood" class="alert text-center d-none">
-        <h3 id="mood-text"></h3>
-        <p id="mood-message"></p>
+
+    <!-- Humeur du jour avec fond dynamique -->
+    {% if mood %}
+    <div id="today-mood" class="alert text-center mood-{{ mood.name|lower|default:"default" }}">
+        <h3 id="mood-text">{{ mood.name }}</h3>
+        <p id="mood-message">Belle journée en perspective !</p>
     </div>
-    
+    {% endif %}
+
     <form method="post" action="{% url 'add_user_mood' %}" class="p-4 shadow bg-white rounded mx-auto" style="max-width: 500px;">
         {% csrf_token %}
-        <!-- Suggestion d'humeur selon la météo -->
-<div class="mb-3 d-none" id="suggested-mood">
-    <p id="suggested-mood-text" class="form-text"></p>
-</div>
 
-        <!-- Sélection de l'humeur -->
+        <!-- Suggestion météo -->
+        <div class="mb-3 d-none" id="suggested-mood">
+            <p id="suggested-mood-text" class="form-text"></p>
+        </div>
+
+        <!-- Sélection d'humeur -->
         <div class="mb-3">
             <label for="mood" class="form-label"><i class="fas fa-smile"></i> Choisissez une humeur :</label>
             <select name="mood_id" id="mood" class="form-select">
-                {% for mood in moods %}
-                <option value="{{ mood.id }}">{{ mood.name }}</option>
+                {% for mood_option in moods %}
+                <option value="{{ mood_option.id }}">{{ mood_option.name }}</option>
                 {% endfor %}
             </select>
         </div>
-        
-        <!-- Champ pour la note/commentaire -->
+
+        <!-- Commentaire -->
         <div class="mb-3">
             <label for="note" class="form-label">Note / Commentaire :</label>
             <textarea id="note" name="note" class="form-control" rows="3" placeholder="Qu'est-ce qui a influencé votre humeur aujourd'hui ?"></textarea>
         </div>
 
-        <!-- Coordonnées géographiques -->
+        <!-- Coordonnées -->
         <input type="hidden" name="latitude" id="latitude">
         <input type="hidden" name="longitude" id="longitude">
 
-
-        <!-- Bouton pour soumettre le formulaire -->
+        <!-- Bouton -->
         <button type="submit" class="btn btn-primary w-100">
             <i class="fas fa-save"></i> Enregistrer
         </button>
     </form>
 </div>
 
+<!-- Scripts -->
 <script src="{% static 'js/moods_chart.js' %}"></script>
 <script src="{% static 'js/mood.js' %}"></script>
 <script src="{% static 'js/streak.js' %}"></script>
 
+<!-- Géolocalisation -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         if (navigator.geolocation) {
@@ -68,5 +74,4 @@
         }
     });
 </script>
-
 {% endblock %}

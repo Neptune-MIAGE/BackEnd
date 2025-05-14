@@ -1,0 +1,20 @@
+.mood-happy {
+    background-color: #d1e7dd; /* vert doux */
+}
+
+.mood-sad {
+    background-color: #f8d7da; /* rouge rose pâle */
+}
+
+.mood-angry {
+    background-color: #fce8d7; /* orange clair */
+}
+
+.mood-calm {
+    background-color: #dbeafe; /* bleu clair */
+}
+
+/* Par défaut */
+.mood-default {
+    background-color: #f8f9fa;
+}

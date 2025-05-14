@@ -107,9 +107,13 @@ def add_user_mood(request):
 
     if request.method == "GET":
         moods = Mood.objects.all()
-        return render(request, 'moods/choose_mood.html', {'moods': moods})
+        last_mood_entry = UserMood.objects.filter(user=request.user).order_by('-date').first()
+        last_mood = last_mood_entry.mood if last_mood_entry else None
 
-    return JsonResponse({"error": "Méthode non autorisée."}, status=405)
+        return render(request, 'moods/choose_mood.html', {
+            'moods': moods,
+            'mood': last_mood  # <-- c’est ça qui manquait
+        })
 
 
 # Vue pour récupérer les humeurs d’un utilisateur

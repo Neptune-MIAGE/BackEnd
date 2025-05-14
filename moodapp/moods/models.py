@@ -132,5 +132,12 @@ class MapEmoji(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    emoji = models.CharField(max_length=10, default=Mood.emoji)
+    emoji = models.CharField(max_length=10)  # <-- correction ici
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.emoji:
+            from moods.models import Mood
+            mood = Mood.objects.first()
+            self.emoji = mood.emoji if mood else "🙂"
+        super().save(*args, **kwargs)

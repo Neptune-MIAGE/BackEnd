@@ -372,7 +372,16 @@ from django.http import HttpResponse
 from .models import MapEmoji
 
 def map_script(request):
-    emojis = MapEmoji.objects.filter(user=request.user).values("latitude", "longitude", "emoji")
+    emojis = MapEmoji.objects.all().values("latitude", "longitude", "emoji")
+
+    # Centrage automatique sur le dernier point
+    last_point = MapEmoji.objects.last()
+    if last_point:
+        center_lat = last_point.latitude
+        center_lng = last_point.longitude
+    else:
+        center_lat = 48.9031  # fallback Nanterre
+        center_lng = 2.2157
 
     emoji_js_array = ",\n".join([
         f"{{ lat: {e['latitude']}, lng: {e['longitude']}, emoji: '{e['emoji']}' }}"
@@ -381,9 +390,7 @@ def map_script(request):
 
     script_content = f"""
     document.addEventListener("DOMContentLoaded", function () {{
-        var latitude = 48.90310022158126;
-        var longitude = 2.2157004596174414;
-        var map = L.map('map').setView([latitude, longitude], 15);
+        var map = L.map('map').setView([{center_lat}, {center_lng}], 15);
 
         L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
             attribution: '&copy; OpenStreetMap contributors'

@@ -37,6 +37,9 @@
             <textarea id="note" name="note" class="form-control" rows="3" placeholder="Qu'est-ce qui a influencé votre humeur aujourd'hui ?"></textarea>
         </div>
 
+        <!-- Coordonnées géographiques -->
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
 
 
         <!-- Bouton pour soumettre le formulaire -->
@@ -50,5 +53,20 @@
 <script src="{% static 'js/mood.js' %}"></script>
 <script src="{% static 'js/streak.js' %}"></script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    document.getElementById("latitude").value = position.coords.latitude;
+                    document.getElementById("longitude").value = position.coords.longitude;
+                },
+                function(error) {
+                    console.warn("Géolocalisation refusée ou échouée :", error);
+                }
+            );
+        }
+    });
+</script>
 
 {% endblock %}

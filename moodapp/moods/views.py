@@ -67,6 +67,9 @@ def add_user_mood(request):
         note = request.POST.get("note", "").strip()  # Récupère la note et supprime les espaces
         weather_condition = request.POST.get("weather_condition", "")
 
+        latitude = request.POST.get("latitude")
+        longitude = request.POST.get("longitude")
+
         if mood_id:
             # Récupère l'humeur associée à l'ID
             mood = get_object_or_404(Mood, id=mood_id)
@@ -79,14 +82,26 @@ def add_user_mood(request):
             UserMood.objects.create(user=request.user, mood=mood, note=note, weather_condition=weather_condition)
 
 
-            # Position de référence : Université Paris Nanterre
-            base_lat = 48.90310022158126
-            base_lng = 2.2157004596174414
-            # Variation aléatoire jusqu'à ±0.0003 ~ 30 mètres environ
-            delta_lat = random.uniform(-0.0003, 0.0003)
-            delta_lng = random.uniform(-0.0003, 0.0003)
-             # Utilise le nom du mood comme emoji (ex: Happy pour "😊")
-            MapEmoji.objects.create(user=request.user,emoji=mood.emoji,  latitude=base_lat + delta_lat,  longitude=base_lng + delta_lng)
+            # ✅ Utilise les coordonnées du navigateur si elles existent
+            if latitude and longitude:
+                MapEmoji.objects.create(
+                    user=request.user,
+                    emoji=mood.emoji,
+                    latitude=float(latitude),
+                    longitude=float(longitude)
+                )
+            else:
+                # Sinon, utilise fallback sur Paris Nanterre
+                base_lat = 48.90310022158126
+                base_lng = 2.2157004596174414
+                delta_lat = random.uniform(-0.0003, 0.0003)
+                delta_lng = random.uniform(-0.0003, 0.0003)
+                MapEmoji.objects.create(
+                    user=request.user,
+                    emoji=mood.emoji,
+                    latitude=base_lat + delta_lat,
+                    longitude=base_lng + delta_lng
+                )
 
         return redirect('user_moods_page')  # Redirige vers la page des humeurs de l'utilisateur après l'enregistrement
 

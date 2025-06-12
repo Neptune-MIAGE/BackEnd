@@ -6,7 +6,19 @@ Kevin SOARES, Ryad MESSAOUDI, Yassine BENABDELKADER, Romain THOMAS
 == App purpose
 Here's a quick description about the app purpose, the features available...
 
-MoodApp is an app where you can enter your mood daily, follow precisely the evolution of your mood, get recommandations on your mood based on the day's weather, and more to come... 
+MoodApp is a personal emotional tracking application designed to help users monitor, understand, and improve their mood over time. Users can log their mood daily, from “awful” to “awesome,” and visualize its progression through dynamic charts and statistics. The app enhances self-awareness by offering smart mood suggestions based on real-time weather data, using the OpenMeteo API.
+
+To enrich the user experience, MoodApp also integrates the Deezer API, allowing the app to suggest music playlists that match the user's current mood. This musical companion adds a personalized and uplifting touch to each emotional state.
+
+Beyond individual tracking, MoodApp fosters community through user groups. Each group displays mood statistics like average and median values, and allows members to join, leave, or transfer leadership roles. Users and groups are also ranked based on average mood, with dedicated pages and podium displays for top performers.
+
+MoodApp further leverages trend analysis and contextual insights to offer personalized advice, such as highlighting recurring mood patterns or identifying mood triggers like rainy weather. These insights are delivered with encouraging messages and visual cues.
+
+An interactive map, powered by OpenStreetMap, displays each user's mood history as geolocated emojis, providing a fun and spatial view of emotional data. This ensures both privacy and engagement, as users only see their own mood markers.
+
+With its combination of emotional intelligence, weather and music integration, social features, and playful visualizations, MoodApp offers a comprehensive and engaging experience for anyone looking to reflect on and elevate their emotional well-being.
+
+
 
 == How to install and run project ?
 
@@ -33,6 +45,12 @@ A chart is created with the user's moods, showing the evolution of the mood.
 
 There are also smileys counters and a pie chart that show the number and repartition of the previous entered moods.
 
+Sequence diagramm:
+
+image::images/diagramms/feature1.png[]
+
+Screenshot:
+
 image::images/screenshot1.jpg[]
 
 === Mood suggestion depending on the wheather
@@ -43,6 +61,12 @@ The user's mood is then suggested, according to the current weather (for example
 The user can follow or not the mood suggestion when he adds his mood.
 
 The current weather is saved when adding a mood. This will be helpful for improving or creating future features.
+
+Sequence diagramm:
+
+image::images/diagramms/feature2.png[]
+
+Screenshot:
 
 image::images/screenshot2.jpg[]
 
@@ -62,6 +86,10 @@ If you're the leader, you have to name someone else leader before leaving.
 
 If there's only one member in the group, leaving the group will delete it.
 
+Sequence diagramm:
+
+image::images/diagramms/feature3.png[]
+
 Screenshot n°1 :
 
 image::images/screenshotFeature3_1.png[]
@@ -80,6 +108,10 @@ There's a podium for users and for groups, displaying the three bests users and 
 There is an individual page for the global users ranking, and same for the global groups rankings.
 
 You can access individual pages for each group and user. For the groups, this will take you to the group page (wether you're a member or not). For the users, this will display a "visit card" of the user with some informations about him.
+
+Sequence diagramm:
+
+image::images/diagramms/feature4.png[]
 
 Screenshot n°1 : 
 
@@ -105,6 +137,10 @@ Analysis of triggers (e.g., “When it rains, you're more often Sad”)
 Personalized advice (e.g., “You've had several Sad days in a row, try doing something you enjoy today”)
 Visualization with colors/tags (e.g., periods of stress, peaks of happiness, etc.)
 
+Sequence diagramm:
+
+image::images/diagramms/feature5.png[]
+
 Screenshot n°1 : 
 
 image::images/screenshotFeature5.png[]
@@ -117,6 +153,10 @@ image::images/screenshotFeature6.png[]
 
 === Map displaying the submitted moods
 This interactive map feature allows each user to visualize their moods as geolocated emojis on an OpenStreetMap API-based interface. Every time a user records a mood through the dedicated form, a corresponding emoji is automatically added at his GPS location (by default, Université Paris Nanterre), with slight variation to prevent overlapping markers. Emojis appear directly on the map as custom icons, replacing the standard blue markers. Each user has their own personal map: only their own mood markers are displayed, ensuring a private and personalized experience. This visual representation adds a playful and engaging layer to emotional tracking while offering a geographic view of moods over time. The map updates dynamically and instantly reflects newly submitted moods.
+
+Sequence diagramm:
+
+image::images/diagramms/feature6.png[]
 
 Screenshot n°1 : 
 

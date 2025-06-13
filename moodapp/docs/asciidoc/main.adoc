@@ -165,3 +165,16 @@ image::images/screenshotFeature7.png[]
 Screenshot n°2 : 
 
 image::images/screenshotFeature8.png[]
+
+
+
+=== Dynamic playlist depending on the modd
+Dynamic retrieval of music playlists is performed based on the user's current mood. A built-in player is integrated using the Deezer widget, allowing users to listen to suggested tracks directly within the app. This feature enhances the MoodMap experience by adding a personalized musical atmosphere tailored to the user's emotional state.
+
+Screenshot n°1 : 
+
+image::images/screenshotFeature9.png[]
+
+Screenshot n°2 : 
+
+image::images/screenshotFeature10.png[]

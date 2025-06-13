@@ -1,45 +1,104 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
-<div class="container py-5">
-    <h1 class="text-center mb-4">Vos Humeurs au Fil du Temps</h1>
-    
-    <!-- Card for Mood History -->
-    <div class="card shadow mb-4">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
-        <div class="card-header text-white" style="background-color: #A3C4BC;">
-            <h3 class="card-title text-center">Historique des Humeurs</h3>
-        </div>
-        <div class="card-body">
-            <canvas id="moodChart" style="width: 100%; height: 400px;"></canvas>
-        </div>
-    </div>
-    
-    <!-- Card for Mood Counter -->
-    <div class="card shadow mb-4 text-center mt-4">
-        <div class="card-header text-white" style="background-color: #C3E5AE;">
-            <h3 class="card-title">Compteur des Humeurs</h3>
-        </div>
-        <div class="card-body">
-            <div id="moodCounter" class="d-flex justify-content-center gap-4">
-                <!-- Les compteurs des humeurs apparaîtront ici dynamiquement -->
+            {% extends 'base.html' %}
+            {% load static %}
+            {% block content %}
+            <div class="container py-5">
+                <h1 class="text-center mb-4">Vos Humeurs au Fil du Temps</h1>
+                
+                <!-- Card for Mood History -->
+                <div class="card shadow mb-4">
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+                    <div class="card-header text-white" style="background-color: #A3C4BC;">
+                        <h3 class="card-title text-center">Historique des Humeurs</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="moodChart" style="width: 100%; height: 400px;"></canvas>
+                    </div>
+                </div>
+                <!-- Card for Playlist Musicale -->
+            <div class="card shadow mb-4 text-center mt-5">
+            <div class="card-header text-white" style="background-color: #92B4EC;">
+                <h3 class="card-title">Playlist selon votre humeur ({{ last_mood }})</h3>
             </div>
-        </div>
-    </div>
-    
-    <!-- Card for Mood Distribution -->
-    <div class="card shadow mb-4 text-center mt-5">
-        <div class="card-header text-white" style="background-color: #eee382;">
-            <h3 class="card-title">Répartition des Humeurs</h3>
-        </div>
-        <div class="card-body">
-            <div class="d-flex justify-content-center">
-                <canvas id="moodArcChart" style="max-width: 500px; max-height: 250px;"></canvas>
+            <div class="card-body">
+                <div id="deezer-player">
+                <p>Chargement de la playlist...</p>
+                </div>
             </div>
-        </div>
-    </div>
-    
-    <script src="{% static 'js/moods_chart.js' %}"></script>
-</div>
-{% endblock %}
+            </div>
+
+                <!-- Card for Mood Counter -->
+                <div class="card shadow mb-4 text-center mt-4">
+                    <div class="card-header text-white" style="background-color: #C3E5AE;">
+                        <h3 class="card-title">Compteur des Humeurs</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="moodCounter" class="d-flex justify-content-center gap-4">
+                            <!-- Les compteurs des humeurs apparaîtront ici dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card for Mood Distribution -->
+                <div class="card shadow mb-4 text-center mt-5">
+                    <div class="card-header text-white" style="background-color: #eee382;">
+                        <h3 class="card-title">Répartition des Humeurs</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center">
+                            <canvas id="moodArcChart" style="max-width: 500px; max-height: 250px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+<script>
+    const moodTrendsURL = "{% url 'mood_trends' %}";
+</script>
+
+                <script src="{% static 'js/moods_chart.js' %}"></script>
+            </div>
+            
+
+            
+
+    <script>
+    const mood = "{{ last_mood|lower|escapejs }}";
+
+    const fallbackPlaylistId = "908622995"; // Playlist "Happy Hits!" officielle Deezer
+
+    fetch(`https://api.codetabs.com/v1/proxy?quest=https://api.deezer.com/search/playlist?q=${mood}`)
+        .then(response => response.json())
+        .then(data => {
+        let playlistId = fallbackPlaylistId;
+        if (data && data.data && data.data.length > 0) {
+            playlistId = data.data[0].id;
+        }
+
+        const iframeHTML = `
+            <iframe
+            title="Playlist ${mood}"
+            scrolling="no"
+            frameborder="0"
+            allowtransparency="true"
+            src="https://widget.deezer.com/widget/dark/playlist/${playlistId}"
+            width="100%"
+            height="300">
+            </iframe>`;
+        document.getElementById("deezer-player").innerHTML = iframeHTML;
+        })
+        .catch(error => {
+        console.error("Erreur API Deezer :", error);
+        document.getElementById("deezer-player").innerHTML = `
+            <p>Erreur de chargement. Playlist par défaut :</p>
+            <iframe
+            title="Playlist par défaut"
+            scrolling="no"
+            frameborder="0"
+            allowtransparency="true"
+            src="https://widget.deezer.com/widget/dark/playlist/${fallbackPlaylistId}"
+            width="100%"
+            height="300">
+            </iframe>`;
+        });
+    </script>
+
+            {% endblock %}

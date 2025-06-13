@@ -157,7 +157,13 @@ def mood_trends(request):
 
 @login_required
 def user_moods_page(request):
-    return render(request, 'moods/user_moods.html')
+    last_mood_entry = UserMood.objects.filter(user=request.user).order_by('-date').first()
+    last_mood = last_mood_entry.mood.name if last_mood_entry else "happy"  # fallback
+
+    return render(request, 'moods/user_moods.html', {
+        'last_mood': last_mood
+    })
+
 
 
 def user_moods_json(request):

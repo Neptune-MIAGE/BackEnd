@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
 
         // Ajout des tendances d'humeur au graphique existant
-        fetch('/moods/trends/')
+        fetch('moods/trends/')
             .then(response => response.json())
             .then(trendData => {
                 console.log("Tendances récupérées :", trendData);
